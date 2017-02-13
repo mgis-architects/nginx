@@ -26,7 +26,7 @@ cd [nginx-waf-docker](https://github.com/mgis-architects/nginx/tree/master/nginx
 
 Execute docker build
 
-`docker build -t nginx_lbr:v1 -f DockerfileNGINX .`
+`docker build -t nginx_lbr:v1 .`
 
 ## Docker build will have files in following locations:
 
