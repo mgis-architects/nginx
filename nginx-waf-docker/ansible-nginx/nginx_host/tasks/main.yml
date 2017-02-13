@@ -125,3 +125,8 @@
     dest: /usr/local/nginx/logs/error.log
     state: link
 
+- name: link mod-security audit to std
+  file:
+    src: /dev/stdout
+    dest: /opt/modsecurity/var/audit/audit.log
+    state: link
