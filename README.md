@@ -6,6 +6,14 @@ Package contains Ansible scripts to run docker container with NGINX (TBD)
 
 It also contain Dockerfile and relevant scripts to build container with NGINX and ModSecurity. 
 
+# Requirements
+
+Docker 1.12+
+
+Ansible 2.2.x+
+
+Internet access from Docker Build Machine as sources will be pulled from different locations during the build.
+
 # Create Docker Image
 
 Install Docker 1.12 on the build machine
