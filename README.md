@@ -1,4 +1,6 @@
-# nginx
+# Nginx on Docker with WAF
+
+Project Currently WIP and not finalized yet
 
 # Overview
 
@@ -20,7 +22,7 @@ Install Docker 1.12 on the build machine
 
 Navigate to the build location
 
-cd &lt;nginx-waf-docker&gt;
+cd [nginx-waf-docker](https://github.com/mgis-architects/nginx/tree/master/nginx-waf-docker)
 
 Execute docker build
 
@@ -28,9 +30,8 @@ Execute docker build
 
 ## Docker build will have files in following locations:
 
-Configruation: /usr/local/nginx/conf/
+**Configruation:** /usr/local/nginx/conf/
 
-OWASP-ModSecurity: /usr/local/nginx/conf/rules/
+**OWASP-ModSecurity:** /usr/local/nginx/conf/rules/
 
-ModSecurity Audith location: /opt/modsecurity/var/audit
 
