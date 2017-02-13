@@ -20,7 +20,9 @@ Execute docker build
 
 ## Docker build will have files in following locations:
 
-### Configruation:### /usr/local/nginx/conf/
-### OWASP-ModSecurity: /usr/local/nginx/conf/rules/
-### ModSecurity Audith location: /opt/modsecurity/var/audit
+Configruation: /usr/local/nginx/conf/
+
+OWASP-ModSecurity: /usr/local/nginx/conf/rules/
+
+ModSecurity Audith location: /opt/modsecurity/var/audit
 
