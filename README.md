@@ -8,6 +8,8 @@ It also contain Dockerfile and relevant scripts to build container with NGINX an
 
 # Create Docker Image
 
+Install Docker 1.12 on the build machine
+
 Navigate to the build location
 
 cd &lt;nginx-waf-docker&gt;
