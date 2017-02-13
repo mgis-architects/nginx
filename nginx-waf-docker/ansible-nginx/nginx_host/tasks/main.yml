@@ -1,0 +1,127 @@
+---
+# tasks file for nginx-host
+- name: install packages
+  yum:
+     name: "{{ item }}" 
+     state: latest
+  with_items:
+    - git
+    - gcc 
+    - gcc-c++ 
+    - make 
+    - zlib-devel 
+    - pcre-devel 
+    - openssl-devel
+    - apr.x86_64 
+    - apr-devel.x86_64 
+    - apr-util.x86_64 
+    - apr-util-devel.x86_64 
+    - httpd-devel.x86_64
+    - automake.noarch
+    - libtool.x86_64
+    - libedit.x86_64 
+    - libxml2-devel
+    - libxslt-devel
+    - gd-devel
+    - perl-ExtUtils-Embed
+    - GeoIP-devel
+    - gperftools
+    - gperftools-devel
+    - libatomic_ops-devel
+    - perl-ExtUtils-Embed
+
+- name: clone ModSecurity repo
+  git:
+     repo: https://github.com/SpiderLabs/ModSecurity.git
+     dest: /usr/src/modsecurity
+     force: yes
+
+- name: create NGINX staging
+  file:
+     path: /source/nginx/
+     state: directory
+     mode: 0755
+
+- name: download NGINX
+  unarchive:
+     src: http://nginx.org/download/nginx-{{nginx_version}}.tar.gz
+     dest: /source/nginx/
+     remote_src: yes
+
+# configure ModSecurity
+
+- name: Running "autogen" for ModSec
+  command: "{{ item }}"
+  args:
+     chdir: /usr/src/modsecurity
+  with_items:
+    - './autogen.sh'
+
+- name: Running "config" for ModSec
+  command: "{{ item }}"
+  args:
+     chdir: /usr/src/modsecurity
+  with_items:
+    - './configure --enable-standalone-module --disable-mlogc'
+
+- name: Running "make" for ModSec
+  command: "{{ item }}"
+  args:
+     chdir: /usr/src/modsecurity
+  with_items:
+    - 'make'
+
+
+# Installing NGINX with ModSecuity
+
+- name: Running ./configure for NGINX
+  command: "{{ item }}"
+  args:
+    chdir: /source/nginx/nginx-{{nginx_version}}/
+  with_items:
+    - './configure --user=root --group=root --with-debug --with-ipv6 --with-http_ssl_module --add-module=/usr/src/modsecurity/nginx/modsecurity --with-http_ssl_module --without-http_access_module --without-http_auth_basic_module --without-http_autoindex_module --without-http_empty_gif_module --without-http_fastcgi_module --without-http_referer_module --without-http_memcached_module --without-http_scgi_module --without-http_split_clients_module --without-http_ssi_module --without-http_uwsgi_module'
+
+- name: Running "make" for NGINX
+  command: '"{{ item }}" chdir=/source/nginx/nginx-{{nginx_version}}/'
+  with_items:
+    - make
+
+- name: Running "make install" for NGINX
+  command: 'make install chdir=/source/nginx/nginx-{{nginx_version}}/'
+
+# prepare env file
+
+- name: create ModSec audit
+  file:
+     path: /opt/modsecurity/var/audit
+     state: directory
+     mode: 0755
+
+- name: clone OWASP repo
+  git:
+     repo: https://github.com/SpiderLabs/owasp-modsecurity-crs.git
+     dest: /source/owasp-modsecurity-crs
+
+
+- name: setup environment variables 
+  command: "{{ item }}"
+  with_items:
+     - 'ln -sf /usr/local/nginx/sbin/nginx /bin/nginx'
+     - 'cp /usr/src/modsecurity/unicode.mapping /usr/local/nginx/conf/'
+     - 'cp -R /source/owasp-modsecurity-crs/rules/ /usr/local/nginx/conf/'
+     - 'mv /usr/local/nginx/conf/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example /usr/local/nginx/conf/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf'
+     - 'mv /usr/local/nginx/conf/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf.example /usr/local/nginx/conf/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf'
+  ignore_errors: yes
+
+- name: link access log to std
+  file:
+    src: /dev/stdout
+    dest: /usr/local/nginx/logs/access.log
+    state: link
+
+- name: link error to std
+  file:
+    src: /dev/stderr
+    dest: /usr/local/nginx/logs/error.log
+    state: link
+
