@@ -34,4 +34,18 @@ Execute docker build
 
 **OWASP-ModSecurity:** /usr/local/nginx/conf/rules/
 
+## Docker Volumes
+
+Volumes to be used in pair with log helpers
+
+**NGiNX Logs**
+
+VOLUME /usr/local/nginx/logs
+
+**ModSecurity Logs**
+
+VOLUME /opt/modsecurity/var/logs
+
+VOLUME /opt/modsecurity/var/audit
+
 

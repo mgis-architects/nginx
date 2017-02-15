@@ -91,11 +91,11 @@
 
 # prepare env file
 
-- name: create ModSec audit
-  file:
-     path: /opt/modsecurity/var/audit
-     state: directory
-     mode: 0755
+# - name: create ModSec audit
+#   file:
+#      path: /opt/modsecurity/var/audit
+#      state: directory
+#      mode: 0755
 
 - name: clone OWASP repo
   git:
@@ -118,15 +118,18 @@
     src: /dev/stdout
     dest: /usr/local/nginx/logs/access.log
     state: link
+  when: {{logger}} == "dockerlog"
 
 - name: link error to std
   file:
     src: /dev/stderr
     dest: /usr/local/nginx/logs/error.log
     state: link
+  when: {{logger}} == "dockerlog"
 
 - name: link mod-security audit to std
   file:
     src: /dev/stdout
-    dest: /opt/modsecurity/var/audit/audit.log
+    dest: /opt/modsecurity/var/logs/modsec_audit.log
     state: link
+  when: {{logger}} == "dockerlog"

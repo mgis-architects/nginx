@@ -1,3 +1,7 @@
 ---
-# vars file for nginx-host
+# NGINX version to build
 nginx_version: 1.10.3
+
+# Container can be built to run with logging to docker log store or to the volumes
+# if volumes are used then logging handling can be directed to the helper like logstash
+logger: "dockerlog"
