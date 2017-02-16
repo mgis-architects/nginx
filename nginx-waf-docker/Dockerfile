@@ -1,7 +1,7 @@
 FROM centos
 MAINTAINER adubnik@gmail.com
 RUN yum -y install http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-9.noarch.rpm && yum -y update && yum -y install ansible 
-ADD ansible-nginx  /source/ansible-nginx
+ADD ansible-nginx  /source/ansible-nginx --extra-vars "nginx_version=${NGINX_VERSION}"
 WORKDIR /source/ansible-nginx
 RUN ansible-playbook install-nginx.yml
 ENTRYPOINT ["/usr/bin/nginx"]
@@ -19,3 +19,5 @@ VOLUME /usr/local/nginx/logs
 # ModSecurity Logs
 VOLUME /opt/modsecurity/var/logs
 VOLUME /opt/modsecurity/var/audit
+
+ARG NGINX_VERSION=1.10.3
