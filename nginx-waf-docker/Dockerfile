@@ -1,10 +1,11 @@
 FROM centos
 MAINTAINER adubnik@gmail.com
 ARG NGINX_VERSION=1.10.3
+ARG LOGGER="dockerlog"
 RUN yum -y install http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-9.noarch.rpm && yum -y update && yum -y install ansible 
 ADD ansible-nginx  /source/ansible-nginx
 WORKDIR /source/ansible-nginx
-RUN ansible-playbook install-nginx.yml  --extra-vars "nginx_version=${NGINX_VERSION}"
+RUN ansible-playbook install-nginx.yml  --extra-vars "nginx_version=${NGINX_VERSION} logger=${LOGGER}"
 ENTRYPOINT ["/usr/bin/nginx"]
 CMD ["-g", "daemon off;"]
 
