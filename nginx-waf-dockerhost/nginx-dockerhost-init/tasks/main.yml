@@ -3,8 +3,11 @@
 
 - name: install docker-latest
   yum:
-    name: docker-latest
+    name: "{{ item }}"
     state: latest
+  with_items:
+    - docker-python
+    - docker-latest
 
 - name: start docker-latest
   systemd:
