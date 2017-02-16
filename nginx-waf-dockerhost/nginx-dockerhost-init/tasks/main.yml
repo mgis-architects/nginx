@@ -1,0 +1,13 @@
+---
+# tasks file for nginx-dockerhost-init
+
+- name: install docker-latest
+  yum:
+    name: docker-latest
+    state: latest
+
+- name: start docker-latest
+  systemd:
+    name: docker-latest
+    enabled: yes
+    state: started

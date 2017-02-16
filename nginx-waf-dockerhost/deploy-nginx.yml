@@ -1,0 +1,6 @@
+- hosts: proxyhost 
+  become: yes
+
+  roles:
+  - nginx-dockerhost-config 
+
