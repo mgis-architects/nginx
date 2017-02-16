@@ -118,18 +118,18 @@
     src: /dev/stdout
     dest: /usr/local/nginx/logs/access.log
     state: link
-  when: {{logger}} == "dockerlog"
+  when: logger == "dockerlog"
 
 - name: link error to std
   file:
     src: /dev/stderr
     dest: /usr/local/nginx/logs/error.log
     state: link
-  when: {{logger}} == "dockerlog"
+  when: logger == "dockerlog"
 
 - name: link mod-security audit to std
   file:
     src: /dev/stdout
     dest: /opt/modsecurity/var/logs/modsec_audit.log
     state: link
-  when: {{logger}} == "dockerlog"
+  when: logger == "dockerlog"
