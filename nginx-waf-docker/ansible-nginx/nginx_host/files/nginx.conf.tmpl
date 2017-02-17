@@ -110,7 +110,6 @@ http {
 
     # HTTPS server
     #
-    {{ if getenv "USE_SSL" == "YES" }}
 
     server {
         listen       443 ssl;
@@ -151,5 +150,4 @@ http {
 
     }
 
-    {{end}}
 }
