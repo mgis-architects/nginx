@@ -42,3 +42,7 @@
     - "/opt/mgis/{{environment_name}}/nginx/conf/modsec_includes.conf:/usr/local/nginx/conf/modsec_includes.conf"
     - "/opt/mgis/{{environment_name}}/nginx/conf/modsecurity.conf:/usr/local/nginx/conf/modsecurity.conf"
     - "/opt/mgis/{{environment_name}}/nginx/conf/nginx.conf:/usr/local/nginx/conf/nginx.conf"
+    - "/opt/mgis/{{environment_name}}/nginx/conf/server.crt:/usr/local/nginx/conf/server.crt"
+    - "/opt/mgis/{{environment_name}}/nginx/conf/server.key:/usr/local/nginx/conf/server.key"
+    - "/opt/mgis/{{environment_name}}/nginx/conf/ca.crt:/usr/local/nginx/conf/ca.crt"
+
