@@ -139,9 +139,10 @@
     - { source: crs-setup.conf, dest: "/usr/local/nginx/conf/rules/crs-setup.conf"}
     - { source: modsec_includes.conf, dest: "/usr/local/nginx/conf/modsec_includes.conf"}
     - { source: modsecurity.conf, dest: "/usr/local/nginx/conf/modsecurity.conf"}
-    # - { source: nginx.conf, dest: "/usr/local/nginx/conf/nginx.conf"}
     - { source: nginx_config.toml, dest: "/etc/confd/conf.d/nginx_config.toml"}
     - { source: nginx.conf.tmpl, dest: "/etc/confd/templates/nginx.conf.tmpl"}
+    - { source: nginx_ssl_config.toml, dest: "/etc/confd/conf.d/nginx_ssl_config.toml"}
+    - { source: nginx.ssl.conf.tmpl, dest: "/etc/confd/templates/nginx.ssl.conf.tmpl"}
 
 - name: link access log to std
   file:
