@@ -9,25 +9,25 @@
     owner: root
     group: root
 
-- name: Setup NGINX config file
-  template:
-    src: nginx.conf.j2
-    dest: "/opt/mgis/{{environment_name}}/nginx/conf/nginx.conf"
-    owner: root
-    group: root
-    mode: 0644
+# - name: Setup NGINX config file
+#   template:
+#     src: nginx.conf.j2
+#     dest: "/opt/mgis/{{environment_name}}/nginx/conf/nginx.conf"
+#     owner: root
+#     group: root
+#     mode: 0644
 
-- name: Copy ModSecurity configuration
-  copy:
-    src: "{{ item.source }}"
-    dest: "{{ item.dest }}"
-    owner: root
-    group: root
-    mode: 0644
-  with_items:
-    - { source: crs-setup.conf, dest: "/opt/mgis/{{environment_name}}/nginx/conf/rules/crs-setup.conf"}
-    - { source: modsec_includes.conf, dest: "/opt/mgis/{{environment_name}}/nginx/conf/modsec_includes.conf"}
-    - { source: modsecurity.conf, dest: "/opt/mgis/{{environment_name}}/nginx/conf/modsecurity.conf"}
+# - name: Copy ModSecurity configuration
+#   copy:
+#     src: "{{ item.source }}"
+#     dest: "{{ item.dest }}"
+#     owner: root
+#     group: root
+#     mode: 0644
+#   with_items:
+#     - { source: crs-setup.conf, dest: "/opt/mgis/{{environment_name}}/nginx/conf/rules/crs-setup.conf"}
+#     - { source: modsec_includes.conf, dest: "/opt/mgis/{{environment_name}}/nginx/conf/modsec_includes.conf"}
+#     - { source: modsecurity.conf, dest: "/opt/mgis/{{environment_name}}/nginx/conf/modsecurity.conf"}
 
 - name: NGINX container
   docker_container:
@@ -38,10 +38,10 @@
       - "{{ server_http_port }}:80"
       - "{{ server_https_port }}:443"
     volumes:
-    - "/opt/mgis/{{environment_name}}/nginx/conf/rules/crs-setup.conf:/usr/local/nginx/conf/rules/crs-setup.conf"
-    - "/opt/mgis/{{environment_name}}/nginx/conf/modsec_includes.conf:/usr/local/nginx/conf/modsec_includes.conf"
-    - "/opt/mgis/{{environment_name}}/nginx/conf/modsecurity.conf:/usr/local/nginx/conf/modsecurity.conf"
-    - "/opt/mgis/{{environment_name}}/nginx/conf/nginx.conf:/usr/local/nginx/conf/nginx.conf"
+    # - "/opt/mgis/{{environment_name}}/nginx/conf/rules/crs-setup.conf:/usr/local/nginx/conf/rules/crs-setup.conf"
+    # - "/opt/mgis/{{environment_name}}/nginx/conf/modsec_includes.conf:/usr/local/nginx/conf/modsec_includes.conf"
+    # - "/opt/mgis/{{environment_name}}/nginx/conf/modsecurity.conf:/usr/local/nginx/conf/modsecurity.conf"
+    # - "/opt/mgis/{{environment_name}}/nginx/conf/nginx.conf:/usr/local/nginx/conf/nginx.conf"
     - "/opt/mgis/{{environment_name}}/nginx/conf/server.crt:/usr/local/nginx/conf/server.crt"
     - "/opt/mgis/{{environment_name}}/nginx/conf/server.key:/usr/local/nginx/conf/server.key"
     - "/opt/mgis/{{environment_name}}/nginx/conf/ca.crt:/usr/local/nginx/conf/ca.crt"

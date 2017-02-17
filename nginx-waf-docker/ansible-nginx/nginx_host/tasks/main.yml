@@ -30,6 +30,12 @@
     - libatomic_ops-devel
     - perl-ExtUtils-Embed
 
+- name: downloag Confd
+  get_url:
+    url: https://github.com/kelseyhightower/confd/releases/download/v0.11.0/confd-0.11.0-linux-amd64
+    dest: /usr/local/bin/confd
+    mode: 0755
+
 - name: clone ModSecurity repo
   git:
      repo: https://github.com/SpiderLabs/ModSecurity.git
@@ -112,6 +118,30 @@
      - 'mv /usr/local/nginx/conf/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example /usr/local/nginx/conf/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf'
      - 'mv /usr/local/nginx/conf/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf.example /usr/local/nginx/conf/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf'
   ignore_errors: yes
+
+- name: Create path
+  file: 
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - /etc/confd/conf.d
+    - /etc/confd/templates
+
+- name: Copy configuration
+  copy:
+    src: "{{ item.source }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - { source: crs-setup.conf, dest: "/usr/local/nginx/conf/rules/crs-setup.conf"}
+    - { source: modsec_includes.conf, dest: "/usr/local/nginx/conf/modsec_includes.conf"}
+    - { source: modsecurity.conf, dest: "/usr/local/nginx/conf/modsecurity.conf"}
+    - { source: nginx.conf, dest: "/usr/local/nginx/conf/nginx.conf"}
+    - { source: nginx_config.toml, dest: "/etc/confd/conf.d/nginx_config.toml"}
+    - { source: nginx.conf.tmpl, dest: "/etc/confd/templates/nginx.conf.tmpl"}
 
 - name: link access log to std
   file:

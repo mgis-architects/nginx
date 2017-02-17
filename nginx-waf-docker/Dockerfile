@@ -17,8 +17,9 @@ RUN yum -y install http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-
 ADD ansible-nginx  /source/ansible-nginx
 WORKDIR /source/ansible-nginx
 RUN ansible-playbook install-nginx.yml  --extra-vars "nginx_version=${NGINX_VERSION} logger=${LOGGER_TYPE}"
-ENTRYPOINT ["/usr/bin/nginx"]
-CMD ["-g", "daemon off;"]
+ADD start.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/start.sh
+ENTRYPOINT ["/usr/local/bin/start.sh"]
 
 # HTTPS & HTTP Ports
 EXPOSE 443 80

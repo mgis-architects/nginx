@@ -1,6 +1,6 @@
 
 user  root;
-worker_processes  1;
+worker_processes  {{ getenv "NGINX_WORKERS" }};
 
 #error_log  logs/error.log;
 #error_log  logs/error.log  notice;
@@ -50,7 +50,7 @@ http {
         #}
 
 		location / {
-			proxy_pass http://app/;
+			proxy_pass {{ getenv "PROXY_PASS_URL" }};
 			proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
 			proxy_redirect off;
 			proxy_buffering off;
@@ -110,23 +110,46 @@ http {
 
     # HTTPS server
     #
-    #server {
-    #    listen       443 ssl;
-    #    server_name  localhost;
+    {{ if getenv "USE_SSL" == "YES" }}
 
-    #    ssl_certificate      cert.pem;
-    #    ssl_certificate_key  cert.key;
+    server {
+        listen       443 ssl;
+        server_name  localhost;
 
-    #    ssl_session_cache    shared:SSL:1m;
-    #    ssl_session_timeout  5m;
+        ssl_certificate      /usr/local/nginx/conf/server.crt;
+        ssl_certificate_key  /usr/local/nginx/conf/server.key;
+        ssl_client_certificate /usr/local/nginx/conf/ca.crt;
+        ssl_verify_client optional;
 
-    #    ssl_ciphers  HIGH:!aNULL:!MD5;
-    #    ssl_prefer_server_ciphers  on;
+        ssl_session_cache    shared:SSL:1m;
+        ssl_session_timeout  5m;
 
-    #    location / {
-    #        root   html;
-    #        index  index.html index.htm;
-    #    }
-    #}
+        ssl_ciphers  HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers  on;
 
+                # Enable ModSecurity
+                ModSecurityEnabled on;
+                ModSecurityConfig modsecurity.conf;
+
+                location / {
+                        proxy_pass {{ getenv "PROXY_PASS_URL" }};
+                        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+                        proxy_redirect off;
+                        proxy_buffering off;
+                        proxy_force_ranges on;
+                        proxy_set_header        Host            $host;
+                        proxy_set_header        X-Real-IP       $remote_addr;
+                        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+                }
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+
+    }
+
+    {{end}}
 }
