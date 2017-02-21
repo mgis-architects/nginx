@@ -97,11 +97,17 @@
 
 # prepare env file
 
-# - name: create ModSec audit
-#   file:
-#      path: /opt/modsecurity/var/audit
-#      state: directory
-#      mode: 0755
+- name: create ModSec audit sequential
+  file:
+     path: /opt/modsecurit/var/logs/
+     state: directory
+     mode: 0755
+
+- name: create ModSec audit parallel
+  file:
+     path: /opt/modsecurit/var/audit/
+     state: directory
+     mode: 0755
 
 - name: clone OWASP repo
   git:
