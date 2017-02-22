@@ -99,13 +99,13 @@
 
 - name: create ModSec audit sequential
   file:
-     path: /opt/modsecurit/var/logs/
+     path: /opt/modsecurity/var/logs/
      state: directory
      mode: 0755
 
 - name: create ModSec audit parallel
   file:
-     path: /opt/modsecurit/var/audit/
+     path: /opt/modsecurity/var/audit/
      state: directory
      mode: 0755
 

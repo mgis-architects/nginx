@@ -1,17 +1,17 @@
 FROM centos
 MAINTAINER adubnik@gmail.com
-ENV REVISION=16_02_2017_13_42
+ENV REVISION=17_02_2017_19_42
 ARG NGINX_VERSION=1.10.3
 ARG LOGGER_TYPE=dockerlog
 ENV NGINX_VERSION ${NGINX_VERSION}
 ENV LOGGER_TYPE ${LOGGER_TYPE}
 
 # NGiNX Logs
-VOLUME /usr/local/nginx/logs
+#VOLUME /usr/local/nginx/logs
 
 # ModSecurity Logs
-VOLUME /opt/modsecurity/var/logs
-VOLUME /opt/modsecurity/var/audit
+#VOLUME /opt/modsecurity/var/logs
+#VOLUME /opt/modsecurity/var/audit
 
 RUN yum -y install http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-9.noarch.rpm && yum -y update && yum -y install ansible 
 ADD ansible-nginx  /source/ansible-nginx
